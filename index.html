@@ -1,0 +1,873 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrinittyCor Seguros — CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <button class="sidebar-close" id="sidebar-close" aria-label="Fechar menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="sidebar-logo__icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <div>
+        <div class="sidebar-logo__name">TrinittyCor</div>
+        <div class="sidebar-logo__sub">Seguros</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Principal</div>
+      <button class="nav-item" data-page="dashboard">
+        <i class="fa-solid fa-house-chimney"></i><span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="clientes">
+        <i class="fa-solid fa-users"></i><span>Clientes</span>
+      </button>
+      <button class="nav-item" data-page="apolices">
+        <i class="fa-solid fa-file-contract"></i><span>Apolices</span>
+      </button>
+
+      <div class="nav-group-label" style="margin-top:8px;">Operacoes</div>
+      <button class="nav-item" data-page="sinistros">
+        <i class="fa-solid fa-triangle-exclamation"></i><span>Sinistros</span>
+      </button>
+      <button class="nav-item" data-page="renovacoes">
+        <i class="fa-solid fa-rotate"></i><span>Renovacoes</span>
+      </button>
+
+      <div class="nav-group-label" style="margin-top:8px;">Analise</div>
+      <button class="nav-item" data-page="relatorios">
+        <i class="fa-solid fa-chart-line"></i><span>Relatorios &amp; BI</span>
+      </button>
+
+      <div class="nav-group-label" style="margin-top:8px;">Sistema</div>
+      <button class="nav-item" data-page="configuracoes">
+        <i class="fa-solid fa-gear"></i><span>Configuracoes</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user__avatar">CM</div>
+      <div class="sidebar-user__info">
+        <div class="sidebar-user__name">Carlos Martins</div>
+        <div class="sidebar-user__role">Corretor Senior</div>
+      </div>
+      <button class="sidebar-user__action" title="Sair"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- MAIN AREA -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-title-wrap">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-sub"   id="topbar-sub">Visao geral da carteira</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" title="Notificacoes"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></button>
+        <button class="topbar-icon-btn" title="Ajuda"><i class="fa-regular fa-circle-question"></i></button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- DASHBOARD -->
+      <section class="page" id="dashboard">
+        <div class="kpi-grid">
+          <div class="kpi kpi--blue">
+            <div class="kpi__icon"><i class="fa-solid fa-users"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Clientes Ativos</div>
+              <div class="kpi__value" id="dash-clientes">--</div>
+              <div class="kpi__trend" id="dash-clientes-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--green">
+            <div class="kpi__icon"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Apolices Ativas</div>
+              <div class="kpi__value" id="dash-apolices">--</div>
+              <div class="kpi__trend" id="dash-apolices-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--amber">
+            <div class="kpi__icon"><i class="fa-solid fa-circle-dollar-to-slot"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Premio Total</div>
+              <div class="kpi__value" id="dash-premio">--</div>
+              <div class="kpi__trend" id="dash-premio-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--red">
+            <div class="kpi__icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Sinistros em Aberto</div>
+              <div class="kpi__value" id="dash-sinistros">--</div>
+              <div class="kpi__trend" id="dash-sinistros-trend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Proximas Renovacoes</div>
+              <div class="table-toolbar__sub">Apolices por data de vencimento</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="navigateTo('renovacoes')">
+              <i class="fa-solid fa-rotate"></i> Ver Todas
+            </button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Cliente</th><th>Apolice</th><th>Ramo</th><th>Vencimento</th><th>Status</th>
+            </tr></thead>
+            <tbody id="dash-renovacoes"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CLIENTES -->
+      <section class="page" id="clientes">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Carteira de Clientes</div>
+              <div class="table-toolbar__sub">Gestao completa de pessoas fisicas e juridicas</div>
+            </div>
+            <div class="flex gap-8">
+              <button class="btn btn-sm" id="btn-export-clientes"><i class="fa-solid fa-download"></i> Exportar</button>
+              <button class="btn btn-primary" id="btn-novo-cliente"><i class="fa-solid fa-plus"></i> Novo Cliente</button>
+            </div>
+          </div>
+          <div class="table-toolbar" style="padding-top:0 !important;">
+            <input class="search" id="cliente-search" type="search" placeholder="Buscar por nome ou CPF/CNPJ..." autocomplete="off"/>
+          </div>
+          <div id="clientes-list"></div>
+        </div>
+      </section>
+
+      <!-- CLIENTE DETALHE -->
+      <section class="page" id="cliente-detalhe">
+        <div class="detail-header">
+          <button class="btn btn-ghost btn-sm" id="btn-back-clientes">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+          <div class="detail-header__info">
+            <div class="client-avatar client-avatar--lg"><i class="fa-regular fa-user"></i></div>
+            <div>
+              <h2 class="detail-header__name" id="detail-nome">--</h2>
+              <div class="detail-header__doc" id="detail-doc">--</div>
+              <div class="detail-header__contacts">
+                <span><i class="fa-regular fa-envelope"></i> <span id="detail-email">--</span></span>
+                <span><i class="fa-solid fa-phone"></i> <span id="detail-tel">--</span></span>
+                <span><i class="fa-solid fa-location-dot"></i> <span id="detail-end">--</span></span>
+                <span><i class="fa-regular fa-calendar"></i> Nasc: <span id="detail-nasc">--</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="detail-header__actions">
+            <button class="btn btn-sm" id="btn-editar-cliente"><i class="fa-regular fa-pen-to-square"></i> Editar</button>
+            <button class="btn btn-sm c-danger" id="btn-excluir-cliente"><i class="fa-regular fa-trash-can"></i> Excluir</button>
+          </div>
+        </div>
+
+        <div class="detail-tabs">
+          <button class="detail-tab active" data-tab="tab-apolices"><i class="fa-solid fa-file-contract"></i> Apolices</button>
+          <button class="detail-tab" data-tab="tab-timeline"><i class="fa-solid fa-timeline"></i> Linha do Tempo</button>
+          <button class="detail-tab" data-tab="tab-financeiro"><i class="fa-solid fa-coins"></i> Financeiro</button>
+        </div>
+
+        <div class="detail-pane active" id="tab-apolices"></div>
+        <div class="detail-pane" id="tab-timeline"></div>
+        <div class="detail-pane" id="tab-financeiro"></div>
+      </section>
+
+      <!-- APOLICES -->
+      <section class="page" id="apolices">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Apolices</div>
+              <div class="table-toolbar__sub">Controle completo da carteira</div>
+            </div>
+            <div class="flex gap-8">
+              <button class="btn btn-sm" id="btn-export-apolices"><i class="fa-solid fa-download"></i> Exportar</button>
+              <button class="btn btn-primary" id="btn-nova-apolice"><i class="fa-solid fa-plus"></i> Nova Apolice</button>
+            </div>
+          </div>
+          <div class="table-toolbar" style="padding-top:0 !important;">
+            <div class="tab-bar" id="ramo-filters">
+              <button class="tab-btn active" data-ramo="todos">Todos</button>
+              <button class="tab-btn" data-ramo="auto"><i class="fa-solid fa-car-side"></i> Auto</button>
+              <button class="tab-btn" data-ramo="vida"><i class="fa-solid fa-heart"></i> Vida</button>
+              <button class="tab-btn" data-ramo="re"><i class="fa-solid fa-house"></i> Residencial</button>
+              <button class="tab-btn" data-ramo="saude"><i class="fa-solid fa-staff-snake"></i> Saude</button>
+              <button class="tab-btn" data-ramo="emp"><i class="fa-solid fa-building"></i> Empresarial</button>
+            </div>
+            <input class="search" id="apolice-search" type="search" placeholder="Buscar por numero ou cliente..." autocomplete="off"/>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="apolices-table">
+              <thead><tr>
+                <th>N Apolice</th><th>Cliente</th><th>Ramo</th><th>Seguradora</th>
+                <th>Vigencia</th><th>Premio</th><th>Status</th><th>Acoes</th>
+              </tr></thead>
+              <tbody id="apolices-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SINISTROS -->
+      <section class="page" id="sinistros">
+        <div class="kpi-grid kpi-grid--3">
+          <div class="kpi kpi--red">
+            <div class="kpi__icon"><i class="fa-solid fa-file-circle-exclamation"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Sinistros Abertos</div>
+              <div class="kpi__value" id="sin-abertos">--</div>
+            </div>
+          </div>
+          <div class="kpi kpi--amber">
+            <div class="kpi__icon"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Total Franquias</div>
+              <div class="kpi__value" id="sin-franquias">--</div>
+            </div>
+          </div>
+          <div class="kpi kpi--green">
+            <div class="kpi__icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Franquias Pagas</div>
+              <div class="kpi__value" id="sin-franq-pagas">--</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Sinistros Registrados</div>
+              <div class="table-toolbar__sub">Acompanhamento e gestao de ocorrencias</div>
+            </div>
+            <button class="btn btn-primary" id="btn-novo-sinistro">
+              <i class="fa-solid fa-plus"></i> Novo Sinistro
+            </button>
+          </div>
+          <div id="sin-list"></div>
+        </div>
+      </section>
+
+      <!-- RENOVACOES -->
+      <section class="page" id="renovacoes">
+        <div class="table-card" style="margin-bottom:24px;">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Pipeline de Renovacoes</div>
+              <div class="table-toolbar__sub">Kanban de oportunidades</div>
+            </div>
+            <button class="btn btn-primary" id="btn-nova-renovacao"><i class="fa-solid fa-plus"></i> Adicionar</button>
+          </div>
+
+          <div class="kanban">
+            <div class="kanban-col" id="ren-col-cotacao">
+              <div class="kanban-col__header">
+                <span class="kanban-col__dot dot--amber"></span>
+                Ag. Cotacao
+                <span class="badge badge--amber count ml-auto">0</span>
+              </div>
+              <div class="kanban-col__body"></div>
+            </div>
+
+            <div class="kanban-col" id="ren-col-enviado">
+              <div class="kanban-col__header">
+                <span class="kanban-col__dot dot--blue"></span>
+                Enviado ao Cliente
+                <span class="badge badge--blue count ml-auto">0</span>
+              </div>
+              <div class="kanban-col__body"></div>
+            </div>
+
+            <div class="kanban-col" id="ren-col-fechado">
+              <div class="kanban-col__header">
+                <span class="kanban-col__dot dot--green"></span>
+                Fechado
+                <span class="badge badge--green count ml-auto">0</span>
+              </div>
+              <div class="kanban-col__body"></div>
+            </div>
+
+            <div class="kanban-col" id="ren-col-perdido">
+              <div class="kanban-col__header">
+                <span class="kanban-col__dot dot--red"></span>
+                Perdido
+                <span class="badge badge--red count ml-auto">0</span>
+              </div>
+              <div class="kanban-col__body"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <div class="table-toolbar__title">Proximos Vencimentos</div>
+              <div class="table-toolbar__sub">Apolices ordenadas por data</div>
+            </div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Cliente</th><th>Apolice</th><th>Ramo</th><th>Seguradora</th>
+              <th>Vencimento</th><th>Premio</th>
+            </tr></thead>
+            <tbody id="ren-venc-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RELATORIOS -->
+      <section class="page" id="relatorios">
+
+        <!-- Period selector -->
+        <div class="rel-period-bar">
+          <span class="rel-period-bar__label">Periodo:</span>
+          <div class="tab-group" id="rel-period">
+            <button class="tab-btn" data-period="7">7 dias</button>
+            <button class="tab-btn active" data-period="30">30 dias</button>
+            <button class="tab-btn" data-period="90">90 dias</button>
+            <button class="tab-btn" data-period="365">Ano</button>
+            <button class="tab-btn" data-period="all">Tudo</button>
+          </div>
+          <button class="btn btn-sm btn-outline" style="margin-left:auto;" onclick="exportRelCSV()"><i class="fa-solid fa-download"></i> Exportar CSV</button>
+        </div>
+
+        <!-- KPI Row 1 -->
+        <div class="kpi-grid">
+          <div class="kpi kpi--blue">
+            <div class="kpi__icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Carteira Total</div>
+              <div class="kpi__value" id="rel-carteira">--</div>
+              <div class="kpi__trend" id="rel-carteira-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--green">
+            <div class="kpi__icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Comissoes</div>
+              <div class="kpi__value" id="rel-comissoes">--</div>
+              <div class="kpi__trend" id="rel-comissoes-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--teal">
+            <div class="kpi__icon"><i class="fa-solid fa-rotate"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Taxa de Renovacao</div>
+              <div class="kpi__value" id="rel-taxa-ren">--</div>
+              <div class="kpi__trend" id="rel-taxa-ren-trend"></div>
+            </div>
+          </div>
+          <div class="kpi kpi--amber">
+            <div class="kpi__icon"><i class="fa-solid fa-percent"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Sinistralidade</div>
+              <div class="kpi__value" id="rel-sinistralidade">--</div>
+              <div class="kpi__trend" id="rel-sind-trend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Row 2 (secondary) -->
+        <div class="kpi-grid kpi-grid--secondary">
+          <div class="kpi kpi--light">
+            <div class="kpi__icon"><i class="fa-solid fa-users"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Total Clientes</div>
+              <div class="kpi__value" id="rel-clientes">--</div>
+            </div>
+          </div>
+          <div class="kpi kpi--light">
+            <div class="kpi__icon"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Apolices Ativas</div>
+              <div class="kpi__value" id="rel-apolices-ativas">--</div>
+            </div>
+          </div>
+          <div class="kpi kpi--light">
+            <div class="kpi__icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Premio Medio</div>
+              <div class="kpi__value" id="rel-premio-medio">--</div>
+            </div>
+          </div>
+          <div class="kpi kpi--purple">
+            <div class="kpi__icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="kpi__body">
+              <div class="kpi__label">Em Renovacao</div>
+              <div class="kpi__value" id="rel-em-ren">--</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts row 1: donut ramos + hbar seguradora -->
+        <div class="rel-charts-row">
+          <div class="card rel-chart-card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Distribuicao por Ramo</div></div>
+            <div class="rel-chart-wrap"><canvas id="chart-ramos"></canvas></div>
+          </div>
+          <div class="card rel-chart-card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Premio por Seguradora</div></div>
+            <div class="rel-hbar-wrap" id="rel-hbar"></div>
+          </div>
+        </div>
+
+        <!-- Charts row 2: evolucao (wide) + status (donut) -->
+        <div class="rel-charts-row rel-charts-row--wide">
+          <div class="card rel-chart-card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Evolucao 12 Meses</div><div class="table-toolbar__sub">Premio (barras) / Comissao (linha)</div></div>
+            <div class="rel-chart-wrap rel-chart-wrap--tall"><canvas id="chart-evolucao"></canvas></div>
+          </div>
+          <div class="card rel-chart-card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Status das Apolices</div></div>
+            <div class="rel-chart-wrap"><canvas id="chart-status"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Tables row -->
+        <div class="rel-tables-row">
+          <div class="card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Top 5 Clientes por Premio</div></div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Cliente</th><th>Apolices</th><th>Premio Total</th></tr></thead>
+                <tbody id="rel-top-clientes"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-toolbar"><div class="table-toolbar__title">Vencimentos Proximos (90 dias)</div></div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Apolice</th><th>Cliente</th><th>Vencimento</th><th></th></tr></thead>
+                <tbody id="rel-venc-proximos"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- CONFIGURACOES -->
+      <section class="page" id="configuracoes">
+        <div class="settings-layout">
+          <nav class="settings-sidebar">
+            <button class="settings-nav-item active" data-settings="set-perfil"><i class="fa-solid fa-user-circle"></i> Perfil</button>
+            <button class="settings-nav-item" data-settings="set-empresa"><i class="fa-solid fa-building"></i> Empresa</button>
+            <button class="settings-nav-item" data-settings="set-notif"><i class="fa-regular fa-bell"></i> Notificacoes</button>
+            <button class="settings-nav-item" data-settings="set-integ"><i class="fa-solid fa-plug"></i> Integracoes</button>
+            <button class="settings-nav-item" data-settings="set-seguranca"><i class="fa-solid fa-lock"></i> Seguranca</button>
+          </nav>
+
+          <div class="settings-content">
+            <div class="settings-pane active" id="set-perfil">
+              <div class="settings-pane__title">Dados do Corretor</div>
+              <form class="settings-form" onsubmit="event.preventDefault(); toast('Perfil salvo.','success')">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nome Completo</label>
+                    <input class="form-control" value="Carlos Martins da Silva"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">SUSEP</label>
+                    <input class="form-control" value="123456-A"/>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">E-mail</label>
+                    <input class="form-control" type="email" value="carlos@trinittycor.com.br"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Telefone</label>
+                    <input class="form-control" value="(11) 94545-6789"/>
+                  </div>
+                </div>
+                <div class="form-group" style="max-width:460px;">
+                  <label class="form-label">Endereco</label>
+                  <input class="form-control" value="Av. Paulista, 1000, Sao Paulo/SP"/>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Salvar Alteracoes</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-pane" id="set-empresa">
+              <div class="settings-pane__title">Dados da Corretora</div>
+              <form class="settings-form" onsubmit="event.preventDefault(); toast('Empresa salva.','success')">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Razao Social</label>
+                    <input class="form-control" value="TrinittyCor Seguros LTDA"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">CNPJ</label>
+                    <input class="form-control" value="00.000.000/0001-00"/>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Salvar Alteracoes</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-pane" id="set-notif">
+              <div class="settings-pane__title">Notificacoes</div>
+              <div class="settings-toggle-list">
+                <div class="settings-toggle-item">
+                  <div>
+                    <div class="settings-toggle-item__label">Renovacoes proximas</div>
+                    <div class="settings-toggle-item__desc">Alertar 30 dias antes do vencimento</div>
+                  </div>
+                  <label class="toggle"><input type="checkbox" checked/><span></span></label>
+                </div>
+                <div class="settings-toggle-item">
+                  <div>
+                    <div class="settings-toggle-item__label">Novos sinistros</div>
+                    <div class="settings-toggle-item__desc">Notificar quando um sinistro for registrado</div>
+                  </div>
+                  <label class="toggle"><input type="checkbox" checked/><span></span></label>
+                </div>
+                <div class="settings-toggle-item">
+                  <div>
+                    <div class="settings-toggle-item__label">Relatorio semanal</div>
+                    <div class="settings-toggle-item__desc">Resumo da carteira toda segunda-feira</div>
+                  </div>
+                  <label class="toggle"><input type="checkbox"/><span></span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-pane" id="set-integ">
+              <div class="settings-pane__title">Integracoes</div>
+              <div class="settings-integ-list">
+                <div class="settings-integ-item">
+                  <div class="settings-integ-item__info">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <div>
+                      <div class="settings-integ-item__name">E-mail SMTP</div>
+                      <div class="settings-integ-item__desc">Envio automatico de renovacoes e sinistros</div>
+                    </div>
+                  </div>
+                  <span class="badge badge--green">Conectado</span>
+                </div>
+                <div class="settings-integ-item">
+                  <div class="settings-integ-item__info">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <div>
+                      <div class="settings-integ-item__name">WhatsApp Business</div>
+                      <div class="settings-integ-item__desc">Avisos automaticos via WhatsApp</div>
+                    </div>
+                  </div>
+                  <span class="badge badge--gray">Desconectado</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-pane" id="set-seguranca">
+              <div class="settings-pane__title">Seguranca</div>
+              <form class="settings-form" onsubmit="event.preventDefault(); toast('Senha atualizada.','success')">
+                <div class="form-group" style="max-width:360px;">
+                  <label class="form-label">Senha Atual</label>
+                  <input class="form-control" type="password" autocomplete="current-password"/>
+                </div>
+                <div class="form-group" style="max-width:360px;">
+                  <label class="form-label">Nova Senha</label>
+                  <input class="form-control" type="password" autocomplete="new-password"/>
+                </div>
+                <div class="form-group" style="max-width:360px;">
+                  <label class="form-label">Confirmar Nova Senha</label>
+                  <input class="form-control" type="password" autocomplete="new-password"/>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Atualizar Senha</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAIS -->
+
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal modal--sm">
+    <div class="modal__header">
+      <h3>Confirmar acao</h3>
+      <button class="modal__close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal__body">
+      <p id="confirm-msg" style="font-size:14px;color:var(--text-2);line-height:1.6;"></p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-ghost" id="confirm-no">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-yes">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal">
+    <div class="modal__header">
+      <h3 id="modal-cliente-title">Novo Cliente</h3>
+      <button class="modal__close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="form-cliente" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="form-cliente-id"/>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tipo <span class="required">*</span></label>
+            <select class="form-control" id="fc-tipo">
+              <option value="PF">Pessoa Fisica</option>
+              <option value="PJ">Pessoa Juridica</option>
+            </select>
+          </div>
+          <div class="form-group form-group--2x">
+            <label class="form-label">Nome Completo / Razao Social <span class="required">*</span></label>
+            <input class="form-control" id="fc-nome" type="text" autocomplete="off" required/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CPF / CNPJ <span class="required">*</span></label>
+            <input class="form-control" id="fc-doc" type="text" autocomplete="off" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Nascimento</label>
+            <input class="form-control" id="fc-nasc" type="text" placeholder="DD/MM/AAAA"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">E-mail</label>
+            <input class="form-control" id="fc-email" type="email" autocomplete="off"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone</label>
+            <input class="form-control" id="fc-tel" type="text" autocomplete="off"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Endereco</label>
+          <input class="form-control" id="fc-end" type="text" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-apolice">
+  <div class="modal">
+    <div class="modal__header">
+      <h3 id="modal-apolice-title">Nova Apolice</h3>
+      <button class="modal__close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="form-apolice" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="form-apolice-id"/>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">N da Apolice <span class="required">*</span></label>
+            <input class="form-control" id="fa-num" type="text" autocomplete="off" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ramo <span class="required">*</span></label>
+            <select class="form-control" id="fa-ramo" required>
+              <option value="">Selecionar...</option>
+              <option value="auto">Automovel</option>
+              <option value="vida">Vida</option>
+              <option value="re">Residencial</option>
+              <option value="saude">Saude</option>
+              <option value="emp">Empresarial</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cliente <span class="required">*</span></label>
+          <select class="form-control" id="fa-cliente" required>
+            <option value="">Selecionar cliente...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Seguradora</label>
+          <input class="form-control" id="fa-seguradora" type="text" autocomplete="off"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Inicio da Vigencia</label>
+            <input class="form-control" id="fa-ini" type="text" placeholder="DD/MM/AAAA"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fim da Vigencia</label>
+            <input class="form-control" id="fa-fim" type="text" placeholder="DD/MM/AAAA"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Premio (R$)</label>
+            <input class="form-control" id="fa-premio" type="number" min="0" step="0.01"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control" id="fa-status">
+            <option value="ativa">Ativa</option>
+            <option value="renovacao">Em Renovacao</option>
+            <option value="vencida">Vencida</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-sinistro">
+  <div class="modal">
+    <div class="modal__header">
+      <h3 id="modal-sinistro-title">Novo Sinistro</h3>
+      <button class="modal__close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="form-sinistro" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="form-sinistro-id"/>
+        <div class="form-row">
+          <div class="form-group form-group--2x">
+            <label class="form-label">Apolice <span class="required">*</span></label>
+            <select class="form-control" id="fs-apolice" required>
+              <option value="">Selecionar apolice...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data da Ocorrencia</label>
+            <input class="form-control" id="fs-data" type="text" placeholder="DD/MM/AAAA"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descricao <span class="required">*</span></label>
+          <textarea class="form-control" id="fs-desc" rows="3" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Oficina / Hospital</label>
+            <input class="form-control" id="fs-oficina" type="text" autocomplete="off"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Previsao de Conclusao</label>
+            <input class="form-control" id="fs-previsao" type="text" placeholder="DD/MM/AAAA"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Franquia (R$)</label>
+            <input class="form-control" id="fs-franquia" type="number" min="0"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Franquia Paga?</label>
+            <select class="form-control" id="fs-franq-paga">
+              <option value="false">Nao</option>
+              <option value="true">Sim</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-control" id="fs-status">
+              <option value="analise">Em Analise</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="encerrado">Encerrado</option>
+              <option value="negado">Negado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-renovacao">
+  <div class="modal modal--sm">
+    <div class="modal__header">
+      <h3>Nova Renovacao</h3>
+      <button class="modal__close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="form-ren" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="form-ren-id"/>
+        <div class="form-group">
+          <label class="form-label">Apolice <span class="required">*</span></label>
+          <select class="form-control" id="fr-apolice" required>
+            <option value="">Selecionar apolice...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status Inicial</label>
+          <select class="form-control" id="fr-status">
+            <option value="cotacao">Ag. Cotacao</option>
+            <option value="enviado">Enviado ao Cliente</option>
+            <option value="fechado">Fechado</option>
+            <option value="perdido">Perdido</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observacoes</label>
+          <textarea class="form-control" id="fr-obs" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancelar</button>
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast-container" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
